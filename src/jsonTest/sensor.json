@@ -1,0 +1,27 @@
+{
+    "total": 2,
+    "items": [
+      {
+        "eui": "AYFJDHFYGJEJ",
+        "name": "lht-gronau",
+        "address": "27427A4",
+        "dateCreated": "2022-12-02",
+        "dateUpdated": "2022-12-02",
+        "metadata": {
+          "batteryVoltage": 3.14,
+          "battery": 123
+        }
+      },
+      {
+        "eui": "FJDJSOGJIGSD",
+        "name": "py-saxion",
+        "address": "37FDFA4",
+        "dateCreated": "2022-12-02",
+        "dateUpdated": "2022-12-02",
+        "metadata": {
+          "batteryVoltage": null,
+          "battery": null
+        }
+      }
+    ]
+  }
