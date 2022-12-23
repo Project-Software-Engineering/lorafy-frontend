@@ -1,0 +1,93 @@
+{
+    "items": [
+      {
+        "index": 1,
+        "device_eui": "FJDJSOGJIGSD",
+        "date": "2022-12-02T00:00:00z",
+        "data": { 
+          "temperature": 13.5,
+          "humidity": 1,
+          "light": 10,
+          "pressure": 19
+        }
+      },
+      {
+        "index": 2,
+        "device_eui": "FJDJSOGJIGSD",
+        "date": "2022-12-03T00:00:00z",
+        "data": { 
+          "temperature": 14,
+          "humidity": 2,
+          "light": 14,
+          "pressure": 18
+        }
+      },
+      {
+        "index": 3,
+        "device_eui": "AYFJDHFYGJEJ",
+        "date": "2022-12-02T00:00:00z",
+        "data": { 
+          "temperature": 10,
+          "humidity": 5,
+          "light": 12,
+          "pressure": 6
+        }
+      },
+      {
+        "index": 4,
+        "device_eui": "AYFJDHFYGJEJ",
+        "date": "2022-12-03T00:00:00z",
+        "data": { 
+          "temperature": 11,
+          "humidity": 4,
+          "light": 9,
+          "pressure": 11
+        }
+      },
+      {
+        "index": 3,
+        "device_eui": "AYFJDHFYGJEJ",
+        "date": "2022-12-04T00:00:00z",
+        "data": { 
+          "temperature": 5,
+          "humidity": 5,
+          "light": 11,
+          "pressure": 8
+        }
+      },
+      {
+        "index": 4,
+        "device_eui": "FJDJSOGJIGSD",
+        "date": "2022-12-04T00:00:00z",
+        "data": { 
+          "temperature": 2,
+          "humidity": 4,
+          "light": 4,
+          "pressure": 13
+        }
+      },
+      {
+        "index": 3,
+        "device_eui": "AYFJDHFYGJEJ",
+        "date": "2022-12-05T00:00:00z",
+        "data": { 
+          "temperature": 1,
+          "humidity": 5,
+          "light": 8,
+          "pressure": 9
+        }
+      },
+      {
+        "index": 4,
+        "device_eui": "FJDJSOGJIGSD",
+        "date": "2022-12-05T00:00:00z",
+        "data": { 
+          "temperature": -1,
+          "humidity": 4,
+          "light": 7,
+          "pressure": 15
+        }
+      }
+    ]    
+  }
+  
