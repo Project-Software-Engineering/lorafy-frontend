@@ -1,5 +1,6 @@
 import { createContext, useState, useMemo } from 'react';
 import { createTheme } from '@mui/material/styles';
+import { INITIAL_THEME } from './constants';
 
 // MUI theme settings
 export const themeSetting = (mode) => {
@@ -64,7 +65,7 @@ export const ColorModeContext = createContext({
 });
 
 export const useTheme = () => {
-  const [mode, setMode] = useState('dark');
+  const [mode, setMode] = useState(INITIAL_THEME);
 
   const colorMode = useMemo(
     () => ({
