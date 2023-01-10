@@ -1,50 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { Component } from "react";
-import Chart from "react-apexcharts";
+import React from 'react';
+import { ColorModeContext, useTheme } from './themes';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import DashboardPage from './pages/DashboardPage';
+import SensorsPage from './pages/SensorsPage';
+import PageWrapper from './pages/PageWrapper';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      options: {
-        chart: {
-          id: "basic-bar"
-        },
-        xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-        }
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <PageWrapper />,
+    children: [
+      {
+        path: '/',
+        element: <DashboardPage />,
       },
-      series: [
-        {
-          name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 91]
-        },
-        {
-          name: "series-2",
-          data: [50, 60, 40, 30, 63, 70, 85, 90]
-        }
-      ]
-    };
-  }
+      {
+        path: 'sensors',
+        element: <SensorsPage />,
+      },
+    ],
+  },
+]);
 
-  render() {
-    return (
-      <div className="app">
-        <div className="row">
-          <div className="mixed-chart">
-            <Chart
-              options={this.state.options}
-              series={this.state.series}
-              type="area"
-              width="500"
-            />
-          </div>
+function App() {
+  const [theme, colorMode] = useTheme();
+
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="app">
+          <main className="content">
+            <RouterProvider router={router} />
+          </main>
         </div>
-      </div>
-    );
-  }
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
 }
 
 export default App;

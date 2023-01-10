@@ -1,3 +1,2 @@
 # lorafy-frontend
-
-LoRaFy frontend repository.
+The repository for the frontend part of the LoRaFY project.

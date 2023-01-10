@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "LoRaFY",
+  "name": "LoRaFY - Your weather from LoRa!",
   "icons": [
     {
       "src": "favicon.ico",
