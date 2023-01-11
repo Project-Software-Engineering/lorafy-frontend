@@ -74,7 +74,9 @@ export default function NavBar() {
           </IconButton>
         )}
         <Box sx={{ flexGrow: 1 }}>
-          <Logo />
+          <Link to={'/'}>
+            <Logo />
+          </Link>
         </Box>
         {!isMobile && (
           <>
