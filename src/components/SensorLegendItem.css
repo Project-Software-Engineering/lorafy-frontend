@@ -1,7 +1,7 @@
 
 .sensor-legend-item {
     cursor: pointer;
-    width: 100%;
+    min-width: 130px;
 }
 
 .sensor-legend-name {
@@ -9,10 +9,8 @@
 }
 
 .sensor-legend-marker {
-    width: 12px;
-    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
     border-radius: 50%;
-    display: inline-block;
     margin-right: 10px;
-    background-color: rebeccapurple;
 }

@@ -55,7 +55,6 @@ export default function SensorLegendItem({ sensorLegend, onOpen, onClose }) {
       onClick={onClick}
       sx={{
         display: 'flex',
-        flexDirection: 'row',
         alignItems: 'center',
         opacity: isOpen ? 1 : 0.5,
         paddingY: 1,
@@ -66,7 +65,10 @@ export default function SensorLegendItem({ sensorLegend, onOpen, onClose }) {
         className="sensor-legend-marker"
         style={{ backgroundColor: sensorLegend.color }}
       />
-      <span className="sensor-legend-name">{sensorLegend.name}</span>
+      <span className="sensor-legend-name">
+        {/* Replace hyphen with non-breaking hyphen */}
+        {sensorLegend.name.replace('-', '‑')}{' '}
+      </span>
       {query.isLoading && isOpen && (
         <CircularProgress color="secondary" sx={{ ml: 1 }} size={15} />
       )}

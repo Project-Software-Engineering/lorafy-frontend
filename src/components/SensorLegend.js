@@ -7,7 +7,7 @@ export default function SensorLegend({
   onCloseSensor,
 }) {
   return (
-    <Box sx={{ p: 2, width: 120 }}>
+    <Box sx={{ p: 2 }}>
       {sensorLegendData.map((sensorLegend) => (
         <SensorLegendItem
           key={sensorLegend.eui}
