@@ -6,6 +6,9 @@ import DashboardPage from './pages/DashboardPage';
 import SensorsPage from './pages/SensorsPage';
 import PageWrapper from './pages/PageWrapper';
 import { BASE_API_URL } from './constants';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { persistQueryClient } from '@tanstack/react-query-persist-client';
 
 const router = createBrowserRouter([
   {
@@ -29,20 +32,39 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: Infinity, // Because the data does not change, we can cache it for infinite seconds
+      staleTime: Infinity, // Because the data does not change, we can mark it as stale for infinite seconds
+    },
+  },
+});
+
+const localStoragePersister = createSyncStoragePersister({
+  storage: window.localStorage,
+});
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
+});
+
 function App() {
   const [theme, colorMode] = useTheme();
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <div className="app">
-          <main className="content">
-            <RouterProvider router={router} />
-          </main>
-        </div>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div className="app">
+            <main className="content">
+              <RouterProvider router={router} />
+            </main>
+          </div>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </QueryClientProvider>
   );
 }
 

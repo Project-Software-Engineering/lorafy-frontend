@@ -38,7 +38,7 @@ export default function DashboardPage() {
     for (const sensor of sensors) {
       if (sensorData[sensor.eui]) {
         const data = sensorData[sensor.eui].map((d) => {
-          const datapoint = d[parameter];
+          const datapoint = d.payload[parameter];
           if (datapoint != null) {
             return roundToDecimals(datapoint);
           } else {
