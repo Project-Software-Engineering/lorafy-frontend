@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import './SensorLegend.css';
 import SensorLegendItem from './SensorLegendItem';
 
 export default function SensorLegend({
@@ -8,7 +7,7 @@ export default function SensorLegend({
   onCloseSensor,
 }) {
   return (
-    <Box>
+    <Box sx={{ p: 2, width: 120 }}>
       {sensorLegendData.map((sensorLegend) => (
         <SensorLegendItem
           key={sensorLegend.eui}

@@ -5,14 +5,6 @@ import { INITIAL_THEME } from './constants';
 // MUI theme settings
 export const themeSetting = (mode) => {
   return {
-    breakpoints: {
-      values: {
-        mobile: 0,
-        tablet: 640,
-        laptop: 1024,
-        desktop: 1200,
-      },
-    },
     palette: {
       mode: mode,
       ...(mode === 'dark'

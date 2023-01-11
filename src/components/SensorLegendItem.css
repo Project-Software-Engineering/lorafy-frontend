@@ -1,6 +1,7 @@
 
-.sensor-legend {
+.sensor-legend-item {
     cursor: pointer;
+    width: 100%;
 }
 
 .sensor-legend-name {

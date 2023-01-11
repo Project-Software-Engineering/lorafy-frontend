@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BASE_API_URL } from '../constants';
 import { Box, CircularProgress } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+import './SensorLegendItem.css';
 
 const TEST_DATAPOINTS = 7;
 const TEST_FROM = 1670536695; // 08 december 2022 22:58
@@ -50,7 +51,7 @@ export default function SensorLegendItem({ sensorLegend, onOpen, onClose }) {
 
   return (
     <Box
-      className="sensor-legend"
+      className="sensor-legend-item"
       onClick={onClick}
       sx={{
         display: 'flex',
