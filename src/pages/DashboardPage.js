@@ -12,14 +12,8 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import OpacityIcon from '@mui/icons-material/Opacity';
 import { useLoaderData } from 'react-router-dom';
-import { BASE_API_URL } from '../constants';
 import SensorLegend from '../components/SensorLegend';
-
-// TODO: Load data:
-//   const test = await fetch(
-//     `${BASE_API_URL}/data?datapoints=5&from=1670536693&to=1671141493&eui=70B3D5499ED96FBD`,
-//   );
-//   console.log('test', test);
+import { roundToDecimals } from '../utils/math';
 
 const COLORS = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
 
@@ -28,37 +22,39 @@ export default function DashboardPage() {
   const isDark = theme.palette.mode === 'dark';
 
   const sensors = useLoaderData();
-  const [parameter, setParameter] = useState('temperature');
-  const [openSensors, setOpenSensors] = useState(
-    sensors.length > 0 ? [sensors[0].eui] : [],
-  );
-
-  // Function that is called when the SensorLegend component selects a new legend
-  const onSensorLegendSelect = (sensorLegend) => {
-    if (openSensors.includes(sensorLegend.eui)) {
-      setOpenSensors(openSensors.filter((s) => s !== sensorLegend.eui));
-    } else {
-      setOpenSensors([...openSensors, sensorLegend.eui]);
-    }
-  };
+  const [parameter, setParameter] = useState('temperatureOutside');
+  const [sensorData, setSensorData] = useState({});
 
   // Create the legend data that will be passed through to the SensorLegend component
   const sensorLegendData = sensors.map((sensor, index) => ({
     eui: sensor.eui,
     name: sensor.name,
     color: COLORS[index], // TODO: What if there are more sensors than colors?
-    open: openSensors.includes(sensor.eui),
-    loading: openSensors.includes(sensor.eui), // TODO: Make this load when there is a request for the data,
   }));
 
   // Calculate the series that will be displayed by the graph
   const sensorSeries = [];
-  for (const sensor of sensors) {
-    if (openSensors.includes(sensor.eui)) {
-      sensorSeries.push({
-        name: sensor.name,
-        data: [1, 2, 3, 5, 8, 9],
-      });
+  if (parameter) {
+    for (const sensor of sensors) {
+      if (sensorData[sensor.eui]) {
+        const data = sensorData[sensor.eui].map((d) => {
+          const datapoint = d[parameter];
+          if (datapoint != null) {
+            return roundToDecimals(datapoint);
+          } else {
+            return null;
+          }
+        });
+        const hasData = data.some((d) => d !== null);
+
+        if (hasData) {
+          sensorSeries.push({
+            name: sensor.name,
+            data,
+            color: sensorLegendData.find((s) => s.eui === sensor.eui).color,
+          });
+        }
+      }
     }
   }
 
@@ -72,7 +68,7 @@ export default function DashboardPage() {
           exclusive
           onChange={(_, newValue) => setParameter(newValue)}
         >
-          <ToggleButton value="temperature" aria-label="temperature">
+          <ToggleButton value="temperatureOutside" aria-label="temperature">
             <ThermostatIcon />
           </ToggleButton>
           <ToggleButton value="light" aria-label="light">
@@ -97,7 +93,7 @@ export default function DashboardPage() {
               mode: isDark ? 'dark' : 'light',
             },
             xaxis: {
-              categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+              categories: [1, 2, 3, 4, 5, 6, 7],
             },
           }}
           series={sensorSeries}
@@ -106,7 +102,21 @@ export default function DashboardPage() {
         />
         <SensorLegend
           sensorLegendData={sensorLegendData}
-          onSensorLegendSelect={onSensorLegendSelect}
+          onCloseSensor={(eui) => {
+            setSensorData((prev) => {
+              const newData = { ...prev };
+              delete newData[eui];
+              return newData;
+            });
+          }}
+          onOpenSensor={(eui, data) => {
+            setSensorData((current) => {
+              return {
+                ...current,
+                [eui]: data,
+              };
+            });
+          }}
         />
       </Box>
     </Card>

@@ -1,34 +1,21 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import './SensorLegend.css';
+import SensorLegendItem from './SensorLegendItem';
 
 export default function SensorLegend({
   sensorLegendData,
-  onSensorLegendSelect,
+  onOpenSensor,
+  onCloseSensor,
 }) {
   return (
     <Box>
       {sensorLegendData.map((sensorLegend) => (
-        <Box
-          className="sensor-legend"
-          onClick={() => onSensorLegendSelect?.(sensorLegend)}
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            opacity: sensorLegend.open ? 1 : 0.5,
-            paddingY: 1,
-          }}
+        <SensorLegendItem
           key={sensorLegend.eui}
-        >
-          <div
-            className="sensor-legend-marker"
-            style={{ backgroundColor: sensorLegend.color }}
-          />
-          <span className="sensor-legend-name">{sensorLegend.name}</span>
-          {sensorLegend.loading && (
-            <CircularProgress color="secondary" sx={{ ml: 1 }} size={15} />
-          )}
-        </Box>
+          sensorLegend={sensorLegend}
+          onOpen={(data) => onOpenSensor?.(sensorLegend.eui, data)}
+          onClose={() => onCloseSensor?.(sensorLegend.eui)}
+        />
       ))}
     </Box>
   );

@@ -11,7 +11,6 @@ import {
   ListItemText,
   Toolbar,
   useTheme,
-  useMediaQuery,
 } from '@mui/material';
 import { useContext } from 'react';
 import { ColorModeContext } from '../themes';
