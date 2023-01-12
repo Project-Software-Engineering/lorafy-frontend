@@ -72,7 +72,26 @@ export default function DashboardPage() {
         margin: 'auto',
       }}
     >
-      TODO: Implement time range selector
+      <ToggleButtonGroup orientation="horizontal">
+        <ToggleButton value="temperatureOutside" aria-label="temperature">
+          1H
+        </ToggleButton>
+        <ToggleButton value="temperatureOutside" aria-label="temperature">
+          1D
+        </ToggleButton>
+        <ToggleButton value="temperatureOutside" aria-label="temperature">
+          1W
+        </ToggleButton>
+        <ToggleButton value="temperatureOutside" aria-label="temperature">
+          1M
+        </ToggleButton>
+        <ToggleButton value="temperatureOutside" aria-label="temperature">
+          1Y
+        </ToggleButton>
+        <ToggleButton value="temperatureOutside" aria-label="temperature">
+          Custom
+        </ToggleButton>
+      </ToggleButtonGroup>
       <Box
         sx={{
           display: 'flex',
