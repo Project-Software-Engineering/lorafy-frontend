@@ -1,0 +1,16 @@
+
+.sensor-legend-item {
+    cursor: pointer;
+    min-width: 130px;
+}
+
+.sensor-legend-name {
+    user-select: none;
+}
+
+.sensor-legend-marker {
+    min-width: 12px;
+    min-height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+}

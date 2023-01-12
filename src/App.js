@@ -1,50 +1,81 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { Component } from "react";
-import Chart from "react-apexcharts";
+import React from 'react';
+import { ColorModeContext, useTheme } from './themes';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import DashboardPage from './pages/DashboardPage';
+import SensorsPage from './pages/SensorsPage';
+import PageWrapper from './pages/PageWrapper';
+import { BASE_API_URL } from './constants';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { persistQueryClient } from '@tanstack/react-query-persist-client';
+import AboutPage from './pages/AboutPage';
+import SettingsPage from './pages/SettingsPage';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      options: {
-        chart: {
-          id: "basic-bar"
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <PageWrapper />,
+    children: [
+      {
+        path: '/',
+        element: <DashboardPage />,
+        loader: async ({ request }) => {
+          return fetch(`${BASE_API_URL}/end-device`, {
+            signal: request.signal,
+          });
         },
-        xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-        }
       },
-      series: [
-        {
-          name: "series-1",
-          data: [30, 40, 45, 50, 49, 60, 70, 91]
-        },
-        {
-          name: "series-2",
-          data: [50, 60, 40, 30, 63, 70, 85, 90]
-        }
-      ]
-    };
-  }
+      {
+        path: 'sensors',
+        element: <SensorsPage />,
+      },
+      {
+        path: 'settings',
+        element: <SettingsPage />,
+      },
+      {
+        path: 'about',
+        element: <AboutPage />,
+      },
+    ],
+  },
+]);
 
-  render() {
-    return (
-      <div className="app">
-        <div className="row">
-          <div className="mixed-chart">
-            <Chart
-              options={this.state.options}
-              series={this.state.series}
-              type="area"
-              width="500"
-            />
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: Infinity, // Because the data does not change, we can cache it for infinite seconds
+      staleTime: Infinity, // Because the data does not change, we can mark it as stale for infinite seconds
+    },
+  },
+});
+
+const localStoragePersister = createSyncStoragePersister({
+  storage: window.localStorage,
+});
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
+});
+
+function App() {
+  const [theme, colorMode] = useTheme();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div className="app">
+            <main className="content">
+              <RouterProvider router={router} />
+            </main>
           </div>
-        </div>
-      </div>
-    );
-  }
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;
