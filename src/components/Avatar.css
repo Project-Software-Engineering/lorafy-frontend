@@ -1,0 +1,14 @@
+a {
+    width: 65px;
+    height: 65px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 5px;
+    text-decoration: none;
+}
