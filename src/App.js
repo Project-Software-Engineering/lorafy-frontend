@@ -45,8 +45,8 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      cacheTime: Infinity, // Because the data does not change, we can cache it for infinite seconds
-      staleTime: Infinity, // Because the data does not change, we can mark it as stale for infinite seconds
+      cacheTime: 900, // 15 minutes
+      staleTime: 900, // 15 minutes
     },
   },
 });

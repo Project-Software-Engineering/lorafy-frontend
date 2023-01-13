@@ -4,10 +4,6 @@ import { Box, CircularProgress } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import './SensorLegendItem.css';
 
-const TEST_DATAPOINTS = 7;
-const TEST_FROM = 1670536695; // 08 december 2022 22:58
-const TEST_TO = TEST_FROM + 3600 * 24 * 7;
-
 async function fetchSensorData(sensorEui, from, to, dataPoints) {
   const getDataPointsRequest = await fetch(
     `${BASE_API_URL}/data?datapoints=${dataPoints}&from=${from}&to=${to}&eui=${sensorEui}`,
@@ -15,20 +11,20 @@ async function fetchSensorData(sensorEui, from, to, dataPoints) {
   return getDataPointsRequest.json();
 }
 
-export default function SensorLegendItem({ sensorLegend, onOpen, onClose }) {
+export default function SensorLegendItem({ sensorLegend, onOpen, onClose, dataOptions }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const queryKey = [
     'sensor-data',
     sensorLegend.eui,
-    TEST_FROM,
-    TEST_TO,
-    TEST_DATAPOINTS,
+    dataOptions.from,
+    dataOptions.to,
+    dataOptions.count,
   ];
   const query = useQuery({
     queryKey,
     queryFn: () =>
-      fetchSensorData(sensorLegend.eui, TEST_FROM, TEST_TO, TEST_DATAPOINTS),
+      fetchSensorData(sensorLegend.eui, dataOptions.from, dataOptions.to, dataOptions.count),
     enabled: isOpen,
     onSuccess: (data) => {
       if (isOpen) {

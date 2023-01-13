@@ -5,6 +5,7 @@ export default function SensorLegend({
   sensorLegendData,
   onOpenSensor,
   onCloseSensor,
+  dataOptions,
 }) {
   return (
     <Box sx={{ p: 2 }}>
@@ -14,6 +15,7 @@ export default function SensorLegend({
           sensorLegend={sensorLegend}
           onOpen={(data) => onOpenSensor?.(sensorLegend.eui, data)}
           onClose={() => onCloseSensor?.(sensorLegend.eui)}
+          dataOptions={dataOptions}
         />
       ))}
     </Box>
