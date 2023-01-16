@@ -31,3 +31,11 @@ body,
 ::-webkit-scrollbar-thumb:hover{
   background: #555;
 }
+
+/**
+  NOTE/TODO: This is an illegal fix to remove the watermark for the date range picker.
+  When this application is published, a proper license should be purchased.
+ */
+div[style="position: absolute; pointer-events: none; color: rgba(130, 130, 130, 0.62); z-index: 100000; width: 100%; text-align: center; bottom: 50%; right: 0px; letter-spacing: 5px; font-size: 24px;"] {
+    display: none;
+}

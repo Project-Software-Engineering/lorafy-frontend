@@ -11,21 +11,28 @@ async function fetchSensorData(sensorEui, from, to, dataPoints) {
   return getDataPointsRequest.json();
 }
 
-export default function SensorLegendItem({ sensorLegend, onOpen, onClose, dataOptions }) {
+export default function SensorLegendItem({
+  sensorLegend,
+  onOpen,
+  onClose,
+  dataOptions,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const queryKey = [
-    'sensor-data',
-    sensorLegend.eui,
-    dataOptions.from,
-    dataOptions.to,
-    dataOptions.count,
-  ];
+  const queryKey = ['sensor-data', sensorLegend.eui];
+  if (dataOptions) {
+    queryKey.push(dataOptions.from, dataOptions.to, dataOptions.count);
+  }
   const query = useQuery({
     queryKey,
     queryFn: () =>
-      fetchSensorData(sensorLegend.eui, dataOptions.from, dataOptions.to, dataOptions.count),
-    enabled: isOpen,
+      fetchSensorData(
+        sensorLegend.eui,
+        dataOptions.from,
+        dataOptions.to,
+        dataOptions.count,
+      ),
+    enabled: isOpen && !!dataOptions,
     onSuccess: (data) => {
       if (isOpen) {
         onOpen(data);
