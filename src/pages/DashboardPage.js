@@ -15,10 +15,13 @@ import { useLoaderData } from 'react-router-dom';
 import SensorLegend from '../components/SensorLegend';
 import { roundToDecimals } from '../utils/math';
 import useIsMobile from '../hooks/useIsMobile';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const COLORS = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'];
 
 export default function DashboardPage() {
+  useDocumentTitle('Dashboard');
+
   const isMobile = useIsMobile();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
