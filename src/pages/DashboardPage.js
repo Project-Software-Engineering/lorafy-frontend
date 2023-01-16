@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import {
   Box,
@@ -8,21 +8,17 @@ import {
   Tooltip,
   useTheme,
 } from '@mui/material';
-import ThermostatIcon from '@mui/icons-material/Thermostat';
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import OpacityIcon from '@mui/icons-material/Opacity';
 import { useLoaderData } from 'react-router-dom';
 import SensorLegend from '../components/SensorLegend';
 import { roundToDecimals } from '../utils/math';
 import useIsMobile from '../hooks/useIsMobile';
+import { House, Park, WbCloudy, WbSunny, Opacity } from '@mui/icons-material';
 import {
-  DeviceThermostat,
-  House,
-  Park,
-  ThermostatAuto,
-  WbCloudy,
-} from '@mui/icons-material';
+  getDataOptionsForDay,
+  getDataOptionsForMonth,
+  getDataOptionsForWeek,
+  getDataOptionsForYear,
+} from '../utils/dataOptions';
 
 const COLORS = [
   '#008FFB',
@@ -34,56 +30,6 @@ const COLORS = [
   '#26a69a',
   '#D10CE8',
 ];
-
-function getHHMM(date) {
-  return `${date.getHours().toString().padStart(2, '0')}:${date
-    .getMinutes()
-    .toString()
-    .padStart(2, '0')}`;
-}
-
-function getTimeRange(t) {
-  if (t === '1h') {
-    const date = new Date();
-    date.setHours(date.getHours() - 1);
-    date.setMinutes(0, 0, 0);
-    const from = Math.floor(date.getTime() / 1000);
-    const to = from + 3600;
-    return {
-      from,
-      to,
-      dataPoints: [getHHMM(date), 1, 2, 3, 4, 4],
-    };
-  }
-}
-
-// const TEST_DATAPOINTS = 7;
-// const TEST_FROM = 1670536695; // 08 december 2022 22:58
-// const TEST_TO = TEST_FROM + 3600 * 24 * 7;
-
-// const TEST_DATAPOINTS = 34;
-// const TEST_TO = Math.floor(1673553149);
-// const TEST_FROM = TEST_TO - 3600 * 24 * TEST_DATAPOINTS;
-
-const TEST_DATAPOINTS = 24;
-
-const date = new Date();
-date.setMinutes(0, 0, 0);
-date.setHours(date.getHours() + 1);
-const TEST_TO = Math.floor(date.getTime() / 1000);
-const TEST_FROM = TEST_TO - 3600 * TEST_DATAPOINTS;
-
-console.log('from', new Date(TEST_FROM * 1000));
-console.log('to', new Date(TEST_TO * 1000));
-
-function getLabelsForDay(from) {
-  const labels = [];
-  for (let i = 0; i < 24; i++) {
-    const date = new Date(from * 1000 + 3600 * 1000 * i);
-    labels.push(getHHMM(date));
-  }
-  return labels;
-}
 
 const parameters = [
   {
@@ -101,7 +47,7 @@ const parameters = [
   {
     id: 'light',
     name: 'Light',
-    icon: <WbSunnyIcon />,
+    icon: <WbSunny />,
   },
   {
     id: 'pressure',
@@ -111,10 +57,29 @@ const parameters = [
   {
     id: 'humidity',
     name: 'Humidity',
-    icon: <OpacityIcon />,
+    icon: <Opacity />,
     unit: '%',
   },
 ];
+
+const STATIC_TIME_RANGES = {
+  day: {
+    label: '1D',
+    dataOptions: getDataOptionsForDay(),
+  },
+  week: {
+    label: '1W',
+    dataOptions: getDataOptionsForWeek(),
+  },
+  month: {
+    label: '1M',
+    dataOptions: getDataOptionsForMonth(),
+  },
+  year: {
+    label: '1Y',
+    dataOptions: getDataOptionsForYear(),
+  },
+};
 
 export default function DashboardPage() {
   const isMobile = useIsMobile();
@@ -124,11 +89,9 @@ export default function DashboardPage() {
   const sensors = useLoaderData();
   const [parameter, setParameter] = useState(parameters[0].id);
   const [sensorData, setSensorData] = useState({});
-  const [currentDataOptions, setCurrentDataOptions] = useState({
-    from: TEST_FROM,
-    to: TEST_TO,
-    count: TEST_DATAPOINTS,
-  });
+
+  const [selectedTimeRange, setSelectedTimeRange] = useState('day');
+  const dataOptions = STATIC_TIME_RANGES[selectedTimeRange].dataOptions;
 
   const getFormattedYValue = useCallback(
     (value) => {
@@ -192,25 +155,26 @@ export default function DashboardPage() {
         margin: 'auto',
       }}
     >
-      <ToggleButtonGroup orientation="horizontal">
-        <ToggleButton value="temperatureOutside" aria-label="temperature">
-          1H
-        </ToggleButton>
-        <ToggleButton value="temperatureOutside" aria-label="temperature">
-          1D
-        </ToggleButton>
-        <ToggleButton value="temperatureOutside" aria-label="temperature">
-          1W
-        </ToggleButton>
-        <ToggleButton value="temperatureOutside" aria-label="temperature">
-          1M
-        </ToggleButton>
-        <ToggleButton value="temperatureOutside" aria-label="temperature">
-          1Y
-        </ToggleButton>
-        <ToggleButton value="temperatureOutside" aria-label="temperature">
-          Custom
-        </ToggleButton>
+      <ToggleButtonGroup
+        orientation="horizontal"
+        value={selectedTimeRange}
+        exclusive
+        onChange={(_, newValue) => {
+          // Makes sure that you can't deselect the button
+          if (newValue) {
+            // Actually set the new value
+            setSelectedTimeRange(newValue);
+          }
+        }}
+      >
+        {Object.entries(STATIC_TIME_RANGES).map(([key, timeRange]) => {
+          return (
+            <ToggleButton key={key} value={key}>
+              {timeRange.label}
+            </ToggleButton>
+          );
+        })}
+        <ToggleButton value="custom">Custom</ToggleButton>
       </ToggleButtonGroup>
       <Box
         sx={{
@@ -254,7 +218,7 @@ export default function DashboardPage() {
                 mode: isDark ? 'dark' : 'light',
               },
               xaxis: {
-                categories: getLabelsForDay(currentDataOptions.from),
+                categories: dataOptions.labels,
                 labels: {
                   rotate: -45,
                   rotateAlways: true,
@@ -296,7 +260,7 @@ export default function DashboardPage() {
               };
             });
           }}
-          dataOptions={currentDataOptions}
+          dataOptions={dataOptions}
         />
       </Box>
     </Card>
