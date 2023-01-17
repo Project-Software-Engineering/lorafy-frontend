@@ -11,6 +11,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { persistQueryClient } from '@tanstack/react-query-persist-client';
 import AboutPage from './pages/AboutPage';
 import SettingsPage from './pages/SettingsPage';
+import { LocalizationProvider } from '@mui/x-date-pickers-pro';
+import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 
 const router = createBrowserRouter([
   {
@@ -64,16 +66,18 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <div className="app">
-            <main className="content">
-              <RouterProvider router={router} />
-            </main>
-          </div>
-        </ThemeProvider>
-      </ColorModeContext.Provider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <div className="app">
+              <main className="content">
+                <RouterProvider router={router} />
+              </main>
+            </div>
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </LocalizationProvider>
     </QueryClientProvider>
   );
 }
