@@ -1,8 +1,11 @@
 import React from 'react';
 import Avatar from '../components/Avatar';
 import './AboutPage.css';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 export default function AboutPage() {
+  useDocumentTitle('About');
+
   return (
     <>
       <h1>About Us</h1>
@@ -37,7 +40,7 @@ export default function AboutPage() {
         testing and refining the application as they go. They hold daily
         stand-up meetings to discuss progress and any issues that need to be
         addressed, and they also hold weekly meetings to review the overall
-        progress of the project and expand the functinality even more.
+        progress of the project and expand the functionality even more.
       </p>
       <p>
         The team members are all experienced and highly skilled, and they are
