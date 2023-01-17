@@ -9,7 +9,6 @@ export default function AboutPage() {
   return (
     <>
       <h1>About Us</h1>
-
       <p>
         A team of five developers is hard at work on a new weather application.
         The team is composed of several individuals with different areas of
@@ -50,27 +49,11 @@ export default function AboutPage() {
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Avatar
-          name="Stefan Kichukov"
-          github="stefank02"
-          backgroundColor="Red"
-        />
-        <Avatar name="Len Bauer" github="wretch45" backgroundColor="Blue" />
-        <Avatar
-          name="Dave Huinink"
-          github="hanzelman"
-          backgroundColor="Green"
-        />
-        <Avatar
-          name="Adelina Muchanga"
-          github="ababsmuc"
-          backgroundColor="#F700ff"
-        />
-        <Avatar
-          name="Stijn Stroeve"
-          github="stijnstroeve"
-          backgroundColor="#F98D07"
-        />
+        <Avatar name="Stefan Kichukov" github="stefank02" />
+        <Avatar name="Len Bauer" github="wretch45" />
+        <Avatar name="Dave Huinink" github="hanzelman" />
+        <Avatar name="Adelina Muchanga" github="ababsmuc" />
+        <Avatar name="Stijn Stroeve" github="stijnstroeve" />
       </div>
     </>
   );
