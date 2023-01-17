@@ -115,3 +115,26 @@ export function getDataOptionsForYear() {
     labels,
   };
 }
+
+/**
+ * Gets the data options for a custom date range.
+ * The data options will have 1 datapoint per day.
+ * @param dateRange
+ * @returns {{count: number, from: *, to: *, labels: *[]}}
+ */
+export function getDataOptionsForCustomRange(dateRange) {
+  const dayCount = dateRange[1].diff(dateRange[0], 'day') + 1;
+  const labels = [];
+  for (let i = 0; i < dayCount; i++) {
+    const date = new Date(dateRange[0].add(i, 'day').unix() * 1000);
+    labels.push(date.toLocaleDateString());
+  }
+
+  const dataOptions = {
+    from: dateRange[0].unix(),
+    to: dateRange[1].unix() + 3600 * 24,
+    count: dayCount,
+    labels,
+  };
+  return dataOptions;
+}

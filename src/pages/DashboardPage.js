@@ -1,14 +1,8 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-} from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import {
   Box,
   Card,
-  Dialog,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
@@ -20,12 +14,12 @@ import { roundToDecimals } from '../utils/math';
 import useIsMobile from '../hooks/useIsMobile';
 import { House, Park, WbCloudy, WbSunny, Opacity } from '@mui/icons-material';
 import {
+  getDataOptionsForCustomRange,
   getDataOptionsForDay,
   getDataOptionsForMonth,
   getDataOptionsForWeek,
   getDataOptionsForYear,
 } from '../utils/dataOptions';
-import { StaticDateRangePicker } from '@mui/x-date-pickers-pro/StaticDateRangePicker';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import dayjs from 'dayjs';
 
@@ -93,8 +87,6 @@ const STATIC_TIME_RANGES = {
   },
 };
 
-console.log(STATIC_TIME_RANGES);
-
 export default function DashboardPage() {
   const isMobile = useIsMobile();
   const theme = useTheme();
@@ -116,9 +108,33 @@ export default function DashboardPage() {
   useEffect(() => {
     if (selectedTimeRangeOption !== 'custom') {
       setDataOptions(STATIC_TIME_RANGES[selectedTimeRangeOption]?.dataOptions);
+      setCustomDateRange([null, null]);
     }
-    setCustomDateRangeOpen(selectedTimeRangeOption === 'custom');
   }, [selectedTimeRangeOption]);
+
+  const onSelectTimeRangeOption = useCallback(
+    (_, newValue) => {
+      if (newValue && newValue !== 'custom') {
+        setSelectedTimeRangeOption(newValue);
+      } else if (
+        newValue === 'custom' ||
+        selectedTimeRangeOption === 'custom'
+      ) {
+        setCustomDateRangeOpen(true);
+      }
+    },
+    [selectedTimeRangeOption],
+  );
+
+  const onDateRangeAccept = useCallback((dateRange) => {
+    const dataOptions = getDataOptionsForCustomRange(dateRange);
+    setDataOptions(dataOptions);
+    setSelectedTimeRangeOption('custom');
+  }, []);
+
+  const onDateRangeClose = useCallback(() => {
+    setCustomDateRangeOpen(false);
+  }, []);
 
   const getFormattedYValue = useCallback(
     (value) => {
@@ -183,27 +199,33 @@ export default function DashboardPage() {
           margin: 'auto',
         }}
       >
-        <ToggleButtonGroup
-          orientation="horizontal"
-          value={selectedTimeRangeOption}
-          exclusive
-          onChange={(_, newValue) => {
-            // Makes sure that you can't deselect the button
-            if (newValue) {
-              // Actually set the new value
-              setSelectedTimeRangeOption(newValue);
-            }
-          }}
-        >
-          {Object.entries(STATIC_TIME_RANGES).map(([key, timeRange]) => {
-            return (
-              <ToggleButton key={key} value={key}>
-                {timeRange.label}
-              </ToggleButton>
-            );
-          })}
-          <ToggleButton value="custom">Custom</ToggleButton>
-        </ToggleButtonGroup>
+        <DateRangePicker
+          closeOnSelect={true}
+          open={customDateRangeOpen}
+          disableFuture
+          minDate={dayjs(MIN_SELECTION_DATE)}
+          value={customDateRange}
+          onChange={setCustomDateRange}
+          onAccept={onDateRangeAccept}
+          onClose={onDateRangeClose}
+          renderInput={() => (
+            <ToggleButtonGroup
+              orientation="horizontal"
+              value={selectedTimeRangeOption}
+              exclusive
+              onChange={onSelectTimeRangeOption}
+            >
+              {Object.entries(STATIC_TIME_RANGES).map(([key, timeRange]) => {
+                return (
+                  <ToggleButton key={key} value={key}>
+                    {timeRange.label}
+                  </ToggleButton>
+                );
+              })}
+              <ToggleButton value="custom">Custom</ToggleButton>
+            </ToggleButtonGroup>
+          )}
+        />
         <Box
           sx={{
             display: 'flex',
@@ -292,41 +314,6 @@ export default function DashboardPage() {
           />
         </Box>
       </Card>
-
-      <DateRangePicker
-        closeOnSelect={true}
-        open={customDateRangeOpen}
-        displayStaticWrapperAs={'desktop'}
-        disableFuture
-        minDate={dayjs(MIN_SELECTION_DATE)}
-        value={customDateRange}
-        onChange={(newDateRange) => {
-          setCustomDateRange(newDateRange);
-        }}
-        onAccept={(dateRange) => {
-          const dayCount = dateRange[1].diff(dateRange[0], 'day') + 1;
-          const labels = [];
-          for (let i = 0; i < dayCount; i++) {
-            labels.push(dateRange[0].add(i, 'day').format('DD/MM/YYYY'));
-          }
-
-          const dataOptions = {
-            from: dateRange[0].unix(),
-            to: dateRange[1].unix() + 3600 * 24,
-            count: dayCount,
-            labels,
-          };
-          setDataOptions(dataOptions);
-        }}
-        onClose={() => {
-          setCustomDateRangeOpen(false);
-          if (customDateRange[0] == null && customDateRange[1] == null) {
-            setSelectedTimeRangeOption('week');
-          }
-          console.log('closed');
-        }}
-        renderInput={() => null}
-      />
     </>
   );
 }
