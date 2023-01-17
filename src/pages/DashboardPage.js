@@ -12,6 +12,7 @@ import { useLoaderData } from 'react-router-dom';
 import SensorLegend from '../components/SensorLegend';
 import { roundToDecimals } from '../utils/math';
 import useIsMobile from '../hooks/useIsMobile';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 import { House, Park, WbCloudy, WbSunny, Opacity } from '@mui/icons-material';
 import {
   getDataOptionsForDay,
@@ -82,6 +83,8 @@ const STATIC_TIME_RANGES = {
 };
 
 export default function DashboardPage() {
+  useDocumentTitle('Dashboard');
+
   const isMobile = useIsMobile();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
