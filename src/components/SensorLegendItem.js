@@ -16,8 +16,9 @@ export default function SensorLegendItem({
   onOpen,
   onClose,
   dataOptions,
+  initialOpen = false,
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(initialOpen);
 
   const queryKey = ['sensor-data', sensorLegend.eui];
   if (dataOptions) {
@@ -41,15 +42,18 @@ export default function SensorLegendItem({
   });
 
   const onClick = async () => {
+    let newIsOpen;
     if (isOpen) {
-      setIsOpen(false);
+      newIsOpen = false;
       onClose?.();
     } else {
-      setIsOpen(true);
+      newIsOpen = true;
       if (query.data) {
         onOpen(query.data);
       }
     }
+
+    setIsOpen(newIsOpen);
   };
 
   return (

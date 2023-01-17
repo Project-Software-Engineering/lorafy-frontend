@@ -23,6 +23,12 @@ import {
 } from '../utils/dataOptions';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import dayjs from 'dayjs';
+import {
+  getDateRangeFromStorage,
+  getStorageItem,
+  saveDateRangeToStorage,
+  saveStorageItem,
+} from '../utils/storage';
 
 // The minimum date that can be selected in the date picker. This is the date that we started collecting data.
 const MIN_SELECTION_DATE = '2022-12-09';
@@ -38,7 +44,7 @@ const COLORS = [
   '#D10CE8',
 ];
 
-const parameters = [
+const PARAMETERS = [
   {
     id: 'temperatureOutside',
     name: 'Temperature Outside',
@@ -69,6 +75,8 @@ const parameters = [
   },
 ];
 
+const DEFAULT_PARAMETER_ID = PARAMETERS[0].id;
+
 const STATIC_TIME_RANGES = {
   day: {
     label: '1D',
@@ -88,6 +96,8 @@ const STATIC_TIME_RANGES = {
   },
 };
 
+const DEFAULT_TIME_RANGE = 'day';
+
 export default function DashboardPage() {
   useDocumentTitle('Dashboard');
 
@@ -96,24 +106,38 @@ export default function DashboardPage() {
   const isDark = theme.palette.mode === 'dark';
 
   const sensors = useLoaderData();
-  const [parameter, setParameter] = useState(parameters[0].id);
+  const [parameter, setParameter] = useState(
+    getStorageItem('parameter') ?? DEFAULT_PARAMETER_ID,
+  );
   const [sensorData, setSensorData] = useState({});
 
-  const [customDateRange, setCustomDateRange] = useState([null, null]);
+  const [customDateRange, setCustomDateRange] = useState(
+    getDateRangeFromStorage() ?? [null, null],
+  );
   const [customDateRangeOpen, setCustomDateRangeOpen] = useState(false);
 
-  const [selectedTimeRangeOption, setSelectedTimeRangeOption] = useState('day');
+  const [selectedTimeRangeOption, setSelectedTimeRangeOption] = useState(
+    getStorageItem('selectedTimeRangeOption') ?? DEFAULT_TIME_RANGE,
+  );
   const [dataOptions, setDataOptions] = useState(
-    STATIC_TIME_RANGES['day']?.dataOptions,
+    STATIC_TIME_RANGES[DEFAULT_TIME_RANGE]?.dataOptions,
   );
 
   // Use effect that updates the data options when the selected time range option changes.
   useEffect(() => {
     if (selectedTimeRangeOption !== 'custom') {
       setDataOptions(STATIC_TIME_RANGES[selectedTimeRangeOption]?.dataOptions);
-      setCustomDateRange([null, null]);
+    } else if (customDateRange[0] && customDateRange[1]) {
+      setDataOptions(getDataOptionsForCustomRange(customDateRange));
+      saveDateRangeToStorage(customDateRange);
     }
-  }, [selectedTimeRangeOption]);
+
+    saveStorageItem('selectedTimeRangeOption', selectedTimeRangeOption);
+  }, [selectedTimeRangeOption, customDateRange]);
+
+  useEffect(() => {
+    saveStorageItem('parameter', parameter);
+  }, [parameter]);
 
   const onSelectTimeRangeOption = useCallback(
     (_, newValue) => {
@@ -129,9 +153,7 @@ export default function DashboardPage() {
     [selectedTimeRangeOption],
   );
 
-  const onDateRangeAccept = useCallback((dateRange) => {
-    const dataOptions = getDataOptionsForCustomRange(dateRange);
-    setDataOptions(dataOptions);
+  const onDateRangeAccept = useCallback(() => {
     setSelectedTimeRangeOption('custom');
   }, []);
 
@@ -146,7 +168,7 @@ export default function DashboardPage() {
       // Replace dot with comma
       value = value.toString().replace('.', ',');
 
-      const unit = parameters.find((p) => p.id === parameter)?.unit;
+      const unit = PARAMETERS.find((p) => p.id === parameter)?.unit;
       if (unit) {
         return `${value} ${unit}`;
       } else {
@@ -250,7 +272,7 @@ export default function DashboardPage() {
               }
             }}
           >
-            {parameters.map((p) => (
+            {PARAMETERS.map((p) => (
               <Tooltip title={p.name} key={p.id} arrow value={p.id}>
                 <ToggleButton value={p.id} aria-label={p.name}>
                   {p.icon}
