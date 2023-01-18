@@ -190,133 +190,131 @@ export default function DashboardPage() {
   }
 
   return (
-    <>
-      <Card
+    <Card
+      sx={{
+        p: 3,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        width: isMobile ? '100%' : 'min-content',
+        margin: 'auto',
+      }}
+    >
+      <DateRangePicker
+        closeOnSelect={true}
+        open={customDateRangeOpen}
+        disableFuture
+        minDate={dayjs(MIN_SELECTION_DATE)}
+        value={customDateRange}
+        onChange={setCustomDateRange}
+        onAccept={onDateRangeAccept}
+        onClose={onDateRangeClose}
+        renderInput={() => (
+          <ToggleButtonGroup
+            orientation="horizontal"
+            value={selectedTimeRangeOption}
+            exclusive
+            onChange={onSelectTimeRangeOption}
+          >
+            {Object.entries(STATIC_TIME_RANGES).map(([key, timeRange]) => {
+              return (
+                <ToggleButton key={key} value={key}>
+                  {timeRange.label}
+                </ToggleButton>
+              );
+            })}
+            <ToggleButton value="custom">Custom</ToggleButton>
+          </ToggleButtonGroup>
+        )}
+      />
+      <Box
         sx={{
-          p: 3,
           display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          flexDirection: 'column',
-          width: isMobile ? '100%' : 'min-content',
-          margin: 'auto',
+          flexBasis: '10%',
         }}
       >
-        <DateRangePicker
-          closeOnSelect={true}
-          open={customDateRangeOpen}
-          disableFuture
-          minDate={dayjs(MIN_SELECTION_DATE)}
-          value={customDateRange}
-          onChange={setCustomDateRange}
-          onAccept={onDateRangeAccept}
-          onClose={onDateRangeClose}
-          renderInput={() => (
-            <ToggleButtonGroup
-              orientation="horizontal"
-              value={selectedTimeRangeOption}
-              exclusive
-              onChange={onSelectTimeRangeOption}
-            >
-              {Object.entries(STATIC_TIME_RANGES).map(([key, timeRange]) => {
-                return (
-                  <ToggleButton key={key} value={key}>
-                    {timeRange.label}
-                  </ToggleButton>
-                );
-              })}
-              <ToggleButton value="custom">Custom</ToggleButton>
-            </ToggleButtonGroup>
-          )}
-        />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexBasis: '10%',
+        <ToggleButtonGroup
+          orientation={isMobile ? 'horizontal' : 'vertical'}
+          value={parameter}
+          exclusive
+          onChange={(_, newValue) => {
+            // Makes sure that you can't deselect the button
+            if (newValue) {
+              // Actually set the new value
+              setParameter(newValue);
+            }
           }}
         >
-          <ToggleButtonGroup
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            value={parameter}
-            exclusive
-            onChange={(_, newValue) => {
-              // Makes sure that you can't deselect the button
-              if (newValue) {
-                // Actually set the new value
-                setParameter(newValue);
-              }
+          {parameters.map((p) => (
+            <Tooltip title={p.name} key={p.id} arrow value={p.id}>
+              <ToggleButton value={p.id} aria-label={p.name}>
+                {p.icon}
+              </ToggleButton>
+            </Tooltip>
+          ))}
+        </ToggleButtonGroup>
+        <Box sx={{ mx: 3 }}>
+          <Chart
+            options={{
+              chart: {
+                background: 'transparent',
+              },
+              legend: {
+                show: false, // Disable legend because we have our own legend
+              },
+              theme: {
+                mode: isDark ? 'dark' : 'light',
+              },
+              xaxis: {
+                categories: dataOptions?.labels || [],
+                labels: {
+                  rotate: -45,
+                  rotateAlways: true,
+                },
+              },
+              yaxis: {
+                labels: {
+                  formatter: getFormattedYValue,
+                },
+              },
+              tooltip: {
+                y: {
+                  formatter: getFormattedYValue,
+                },
+              },
+              markers: {
+                size: 4,
+              },
             }}
-          >
-            {parameters.map((p) => (
-              <Tooltip title={p.name} key={p.id} arrow value={p.id}>
-                <ToggleButton value={p.id} aria-label={p.name}>
-                  {p.icon}
-                </ToggleButton>
-              </Tooltip>
-            ))}
-          </ToggleButtonGroup>
-          <Box sx={{ mx: 3 }}>
-            <Chart
-              options={{
-                chart: {
-                  background: 'transparent',
-                },
-                legend: {
-                  show: false, // Disable legend because we have our own legend
-                },
-                theme: {
-                  mode: isDark ? 'dark' : 'light',
-                },
-                xaxis: {
-                  categories: dataOptions?.labels || [],
-                  labels: {
-                    rotate: -45,
-                    rotateAlways: true,
-                  },
-                },
-                yaxis: {
-                  labels: {
-                    formatter: getFormattedYValue,
-                  },
-                },
-                tooltip: {
-                  y: {
-                    formatter: getFormattedYValue,
-                  },
-                },
-                markers: {
-                  size: 4,
-                },
-              }}
-              series={sensorSeries}
-              type="line"
-              width={isMobile ? '120%' : 800}
-            />
-          </Box>
-          <SensorLegend
-            sensorLegendData={sensorLegendData}
-            onCloseSensor={(eui) => {
-              setSensorData((prev) => {
-                const newData = { ...prev };
-                delete newData[eui];
-                return newData;
-              });
-            }}
-            onOpenSensor={(eui, data) => {
-              setSensorData((current) => {
-                return {
-                  ...current,
-                  [eui]: data,
-                };
-              });
-            }}
-            dataOptions={dataOptions}
+            series={sensorSeries}
+            type="line"
+            width={isMobile ? '120%' : 800}
           />
         </Box>
-      </Card>
-    </>
+        <SensorLegend
+          sensorLegendData={sensorLegendData}
+          onCloseSensor={(eui) => {
+            setSensorData((prev) => {
+              const newData = { ...prev };
+              delete newData[eui];
+              return newData;
+            });
+          }}
+          onOpenSensor={(eui, data) => {
+            setSensorData((current) => {
+              return {
+                ...current,
+                [eui]: data,
+              };
+            });
+          }}
+          dataOptions={dataOptions}
+        />
+      </Box>
+    </Card>
   );
 }

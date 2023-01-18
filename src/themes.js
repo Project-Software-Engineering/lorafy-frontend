@@ -27,10 +27,12 @@ export const themeSetting = (mode) => {
       h1: {
         fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
         fontSize: 40,
+        fontWeight: 600,
       },
       h2: {
         fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
         fontSize: 32,
+        fontWeight: 600,
       },
       h3: {
         fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),

@@ -1,7 +1,7 @@
 import React from 'react';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import { useLoaderData } from 'react-router-dom';
-import { Card } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import {
   Battery0Bar,
@@ -10,6 +10,7 @@ import {
   BatteryFull,
 } from '@mui/icons-material';
 import './SensorsPage.css';
+import useIsMobile from '../hooks/useIsMobile';
 
 function getBatteryLevelIcon(batteryLevel) {
   if (batteryLevel <= 0) {
@@ -74,24 +75,30 @@ export default function SensorsPage() {
   useDocumentTitle('Sensors');
 
   const sensors = useLoaderData();
+  const isMobile = useIsMobile();
 
   return (
-    <>
-      <h1>Sensors Page</h1>
-      <Card sx={{ height: 550, width: '100%' }} className="sensors">
-        {sensors.length > 0 ? (
-          <DataGrid
-            rows={sensors}
-            columns={SENSOR_COLUMNS}
-            pageSize={15}
-            disableSelectionOnClick
-            getRowId={(row) => row.eui}
-            disableColumnMenu
-          />
-        ) : (
-          <div>Loading data...</div>
-        )}
-      </Card>
-    </>
+    <Card
+      sx={{
+        width: isMobile ? '100%' : '65%',
+        p: 2,
+        m: 'auto',
+      }}
+    >
+      <Typography variant="h2">Sensors</Typography>
+
+      <Box sx={{ height: 500 }}>
+        <DataGrid
+          sx={{ mt: 2 }}
+          rows={sensors}
+          columns={SENSOR_COLUMNS}
+          pageSize={15}
+          rowsPerPageOptions={[15]}
+          disableSelectionOnClick
+          getRowId={(row) => row.eui}
+          disableColumnMenu
+        />
+      </Box>
+    </Card>
   );
 }
