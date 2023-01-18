@@ -23,6 +23,7 @@ export const themeSetting = (mode) => {
     typography: {
       fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
       fontSize: 12,
+      fontWeightMedium: 600,
       h1: {
         fontFamily: ['Source Sans Pro', 'sans-serif'].join(','),
         fontSize: 40,
