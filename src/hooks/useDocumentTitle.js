@@ -4,7 +4,6 @@ const PREFIX = 'LoRaFy';
 
 export default function useDocumentTitle(title) {
   useEffect(() => {
-    const oldTitle = document.title;
     if (title) {
       document.title = PREFIX + ' - ' + title;
     }
