@@ -31,6 +31,11 @@ const router = createBrowserRouter([
       {
         path: 'sensors',
         element: <SensorsPage />,
+        loader: async ({ request }) => {
+          return fetch(`${BASE_API_URL}/end-device`, {
+            signal: request.signal,
+          });
+        },
       },
       {
         path: 'settings',
