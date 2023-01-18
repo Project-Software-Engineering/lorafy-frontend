@@ -61,11 +61,15 @@ const PARAMETERS = [
     id: 'light',
     name: 'Light',
     icon: <WbSunny />,
+    unit: '%',
+    valueMapper: (value) => (value / 255) * 100,
   },
   {
     id: 'pressure',
     name: 'Pressure',
     icon: <WbCloudy />,
+    unit: 'kPa',
+    valueMapper: (value) => value * ((115 - 50) / 1023) + 50, // From MPL115A1 datasheet
   },
   {
     id: 'humidity',
@@ -188,11 +192,17 @@ export default function DashboardPage() {
   // Calculate the series that will be displayed by the graph
   const sensorSeries = [];
   if (parameter) {
+    const valueMapper = PARAMETERS.find((p) => p.id === parameter)?.valueMapper;
+
     for (const sensor of sensors) {
       if (sensorData[sensor.eui]) {
         const data = sensorData[sensor.eui].map((d) => {
-          const datapoint = d.payload?.[parameter];
+          let datapoint = d.payload?.[parameter];
+
           if (datapoint != null) {
+            if (valueMapper) {
+              datapoint = valueMapper(datapoint);
+            }
             return roundToDecimals(datapoint);
           } else {
             return null;
