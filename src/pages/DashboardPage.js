@@ -297,6 +297,9 @@ export default function DashboardPage() {
               chart: {
                 background: 'transparent',
               },
+              stroke: {
+                curve: 'smooth',
+              },
               legend: {
                 show: false, // Disable legend because we have our own legend
               },
