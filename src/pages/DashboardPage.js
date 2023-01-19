@@ -242,6 +242,7 @@ export default function DashboardPage() {
         onChange={setCustomDateRange}
         onAccept={onDateRangeAccept}
         onClose={onDateRangeClose}
+        showToolbar={false}
         renderInput={() => (
           <ToggleButtonGroup
             orientation="horizontal"
