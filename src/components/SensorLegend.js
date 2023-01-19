@@ -9,7 +9,7 @@ export default function SensorLegend({
   dataOptions,
 }) {
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, border: 'rgba(0, 0, 0, 0.12) solid 1px', borderRadius: 4 }}>
       {sensorLegendData.map((sensorLegend, i) => {
         const openStorageKey = `${sensorLegend.eui}/open`;
         const currentOpen = getStorageItem(openStorageKey) ?? false;

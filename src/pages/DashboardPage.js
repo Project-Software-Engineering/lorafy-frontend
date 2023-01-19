@@ -267,6 +267,7 @@ export default function DashboardPage() {
           alignItems: 'center',
           justifyContent: 'center',
           flexBasis: '10%',
+          width: '100%'
         }}
       >
         <ToggleButtonGroup
@@ -289,7 +290,7 @@ export default function DashboardPage() {
             </Tooltip>
           ))}
         </ToggleButtonGroup>
-        <Box sx={{ mx: 3 }}>
+        <Box sx={{ mx: 3, width: '100%' }}>
           <Chart
             options={{
               chart: {
@@ -324,7 +325,7 @@ export default function DashboardPage() {
             }}
             series={sensorSeries}
             type="line"
-            width={isMobile ? '120%' : 800}
+            width={isMobile ? '100%' : 800}
           />
         </Box>
         <SensorLegend
