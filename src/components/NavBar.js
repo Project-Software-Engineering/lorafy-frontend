@@ -30,10 +30,10 @@ const NAV_BAR_LINKS = [
     title: 'Sensors',
     path: '/sensors',
   },
-  {
-    title: 'Settings',
-    path: '/settings',
-  },
+  // {
+  //   title: 'Settings',
+  //   path: '/settings',
+  // },
   {
     title: 'About',
     path: '/about',

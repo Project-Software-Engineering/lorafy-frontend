@@ -10,44 +10,49 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { persistQueryClient } from '@tanstack/react-query-persist-client';
 import AboutPage from './pages/AboutPage';
-import SettingsPage from './pages/SettingsPage';
+// import SettingsPage from './pages/SettingsPage';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <PageWrapper />,
+      children: [
+        {
+          path: '/',
+          element: <DashboardPage />,
+          loader: async ({ request }) => {
+            return fetch(`${BASE_API_URL}/end-device`, {
+              signal: request.signal,
+            });
+          },
+        },
+        {
+          path: 'sensors',
+          element: <SensorsPage />,
+          loader: async ({ request }) => {
+            return fetch(`${BASE_API_URL}/end-device`, {
+              signal: request.signal,
+            });
+          },
+        },
+        // {
+        //   path: 'settings',
+        //   element: <SettingsPage />,
+        // },
+        {
+          path: 'about',
+          element: <AboutPage />,
+        },
+      ],
+    },
+  ],
   {
-    path: '/',
-    element: <PageWrapper />,
-    children: [
-      {
-        path: '/',
-        element: <DashboardPage />,
-        loader: async ({ request }) => {
-          return fetch(`${BASE_API_URL}/end-device`, {
-            signal: request.signal,
-          });
-        },
-      },
-      {
-        path: 'sensors',
-        element: <SensorsPage />,
-        loader: async ({ request }) => {
-          return fetch(`${BASE_API_URL}/end-device`, {
-            signal: request.signal,
-          });
-        },
-      },
-      {
-        path: 'settings',
-        element: <SettingsPage />,
-      },
-      {
-        path: 'about',
-        element: <AboutPage />,
-      },
-    ],
+    basename: '/lorafy-frontend',
   },
-]);
+);
 
 const queryClient = new QueryClient({
   defaultOptions: {
