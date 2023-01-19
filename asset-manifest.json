@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/lorafy-frontend/static/css/main.538fda84.css",
-    "main.js": "/lorafy-frontend/static/js/main.0430b7af.js",
+    "main.js": "/lorafy-frontend/static/js/main.0151b3bf.js",
     "static/media/logo_light_mode.svg": "/lorafy-frontend/static/media/logo_light_mode.49dd9aee4aab330900e38c0fa3228779.svg",
     "static/media/logo_dark_mode.svg": "/lorafy-frontend/static/media/logo_dark_mode.6918d649e7115c5ba6899114952e5db6.svg",
     "index.html": "/lorafy-frontend/index.html",
     "main.538fda84.css.map": "/lorafy-frontend/static/css/main.538fda84.css.map",
-    "main.0430b7af.js.map": "/lorafy-frontend/static/js/main.0430b7af.js.map"
+    "main.0151b3bf.js.map": "/lorafy-frontend/static/js/main.0151b3bf.js.map"
   },
   "entrypoints": [
     "static/css/main.538fda84.css",
-    "static/js/main.0430b7af.js"
+    "static/js/main.0151b3bf.js"
   ]
 }
