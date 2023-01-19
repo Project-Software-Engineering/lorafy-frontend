@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/lorafy-frontend/static/css/main.538fda84.css",
-    "main.js": "/lorafy-frontend/static/js/main.f40b72c7.js",
-    "static/media/logo_light_mode.svg": "/lorafy-frontend/static/media/logo_light_mode.be0d6ff61fe94db451561a2f3d9b46af.svg",
-    "static/media/logo_dark_mode.svg": "/lorafy-frontend/static/media/logo_dark_mode.685a72dabf54255589fcd81f54d3631c.svg",
+    "main.js": "/lorafy-frontend/static/js/main.0430b7af.js",
+    "static/media/logo_light_mode.svg": "/lorafy-frontend/static/media/logo_light_mode.49dd9aee4aab330900e38c0fa3228779.svg",
+    "static/media/logo_dark_mode.svg": "/lorafy-frontend/static/media/logo_dark_mode.6918d649e7115c5ba6899114952e5db6.svg",
     "index.html": "/lorafy-frontend/index.html",
     "main.538fda84.css.map": "/lorafy-frontend/static/css/main.538fda84.css.map",
-    "main.f40b72c7.js.map": "/lorafy-frontend/static/js/main.f40b72c7.js.map"
+    "main.0430b7af.js.map": "/lorafy-frontend/static/js/main.0430b7af.js.map"
   },
   "entrypoints": [
     "static/css/main.538fda84.css",
-    "static/js/main.f40b72c7.js"
+    "static/js/main.0430b7af.js"
   ]
 }
