@@ -1,6 +1,7 @@
 import { createContext, useState, useMemo } from 'react';
 import { createTheme } from '@mui/material/styles';
 import { INITIAL_THEME } from './constants';
+import {getStorageItem, saveStorageItem} from "./utils/storage";
 
 // MUI theme settings
 export const themeSetting = (mode) => {
@@ -56,16 +57,22 @@ export const themeSetting = (mode) => {
 
 // context for color mode
 export const ColorModeContext = createContext({
-  toggleColorMode: () => {},
+  toggleColorMode: () => {
+  },
 });
 
 export const useTheme = () => {
-  const [mode, setMode] = useState(INITIAL_THEME);
+  const [mode, setMode] = useState(getStorageItem('theme') || INITIAL_THEME);
 
   const colorMode = useMemo(
     () => ({
-      toggleColorMode: () =>
-        setMode((prev) => (prev === 'light' ? 'dark' : 'light')),
+      toggleColorMode: () => {
+        setMode((prev) => {
+          const newMode = prev === 'light' ? 'dark' : 'light';
+          saveStorageItem('theme', newMode);
+          return newMode;
+        });
+      }
     }),
     [],
   );

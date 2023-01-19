@@ -87,16 +87,15 @@ export default function SensorsPage() {
     >
       <Typography variant="h2">Sensors</Typography>
 
-      <Box sx={{ height: 500 }}>
+      <Box>
         <DataGrid
+          autoHeight
           sx={{ mt: 2 }}
           rows={sensors}
           columns={SENSOR_COLUMNS}
-          pageSize={15}
-          rowsPerPageOptions={[15]}
+          hideFooter={true}
           disableSelectionOnClick
           getRowId={(row) => row.eui}
-          disableColumnMenu
         />
       </Box>
     </Card>
